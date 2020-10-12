@@ -1,0 +1,600 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Swift version 5.3-dev (LLVM c377dba73da1364, Swift 4419f879adac304)
+// swift-module-flags: -target x86_64-apple-macosx10.9 -enable-objc-interop -enable-library-evolution -module-link-name swiftStdlibUnittest -swift-version 5 -O -enforce-exclusivity=unchecked -disable-objc-attr-requires-foundation-module -module-name StdlibUnittest
+import Darwin
+import Foundation
+import ObjectiveC
+import Swift
+import SwiftPrivate
+import SwiftPrivateLibcExtras
+import SwiftPrivateThreadExtras
+extension String {
+  public var _lines: [Swift.String] {
+    get
+  }
+  public func _split(separator: Swift.Unicode.Scalar) -> [Swift.String]
+}
+public struct SourceLoc {
+  public let file: Swift.String
+  public let line: Swift.UInt
+  public let comment: Swift.String?
+  public init(_ file: Swift.String, _ line: Swift.UInt, comment: Swift.String? = nil)
+  public func withCurrentLoc(_ file: Swift.String = #file, line: Swift.UInt = #line) -> StdlibUnittest.SourceLocStack
+}
+public struct SourceLocStack {
+  public init()
+  public init(_ loc: StdlibUnittest.SourceLoc)
+  public func with(_ loc: StdlibUnittest.SourceLoc) -> StdlibUnittest.SourceLocStack
+  public func pushIf(_ showFrame: Swift.Bool, file: Swift.String, line: Swift.UInt) -> StdlibUnittest.SourceLocStack
+  public func withCurrentLoc(file: Swift.String = #file, line: Swift.UInt = #line) -> StdlibUnittest.SourceLocStack
+  public func print()
+}
+public func expectFailure(_ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line, invoking body: () -> Swift.Void)
+public func noop<T>(_ value: T)
+public func identity<T>(_ value: T) -> T
+public func identity(_ element: StdlibUnittest.OpaqueValue<Swift.Int>) -> StdlibUnittest.OpaqueValue<Swift.Int>
+public func identityEq(_ element: StdlibUnittest.MinimalEquatableValue) -> StdlibUnittest.MinimalEquatableValue
+public func identityComp(_ element: StdlibUnittest.MinimalComparableValue) -> StdlibUnittest.MinimalComparableValue
+public func expectEqual<T>(_ expected: T, _ actual: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Equatable
+public func expectEqual<T, U>(_ expected: (T, U), _ actual: (T, U), _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Equatable, U : Swift.Equatable
+public func expectEqual<T, U, V>(_ expected: (T, U, V), _ actual: (T, U, V), _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Equatable, U : Swift.Equatable, V : Swift.Equatable
+public func expectEqual<T, U, V, W>(_ expected: (T, U, V, W), _ actual: (T, U, V, W), _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Equatable, U : Swift.Equatable, V : Swift.Equatable, W : Swift.Equatable
+public func expectEqual(_ expected: Swift.String, _ actual: Swift.Substring, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectEqual(_ expected: Swift.Substring, _ actual: Swift.String, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectEqual(_ expected: Swift.String, _ actual: Swift.String, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectEqualReference(_ expected: Swift.AnyObject?, _ actual: Swift.AnyObject?, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectationFailure(_ reason: Swift.String, trace message: Swift.String, stackTrace: StdlibUnittest.SourceLocStack)
+public func expectEqualTest<T>(_ expected: T, _ actual: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line, sameValue equal: (T, T) -> Swift.Bool)
+public func expectNotEqual<T>(_ expected: T, _ actual: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Equatable
+public func expectOptionalEqual<T>(_ expected: T, _ actual: T?, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line, sameValue equal: (T, T) -> Swift.Bool)
+public func expectEqual(_ expected: Any.Type, _ actual: Any.Type, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectLT<T>(_ lhs: T, _ rhs: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Comparable
+public func expectLE<T>(_ lhs: T, _ rhs: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Comparable
+public func expectGT<T>(_ lhs: T, _ rhs: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Comparable
+public func expectGE<T>(_ lhs: T, _ rhs: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Comparable
+public func expectTrapping<Bound>(_ point: Bound, in range: Swift.Range<Bound>, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Bound : Swift.Comparable
+public func expectTrapping<Bound>(_ subRange: Swift.Range<Bound>, in range: Swift.Range<Bound>, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Bound : Swift.Comparable
+public func expectTrapping<Bound>(_ point: Bound, in range: Swift.ClosedRange<Bound>, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Bound : Swift.Comparable
+public func expectTrapping<Bound>(_ subRange: Swift.ClosedRange<Bound>, in range: Swift.Range<Bound>, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Bound : Swift.Comparable
+public func expectTrapping<Bound>(_ subRange: Swift.ClosedRange<Bound>, in range: Swift.ClosedRange<Bound>, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Bound : Swift.Comparable
+public func expectType<T>(_: T.Type, _ x: inout T)
+public func expectEqualType<T>(_: T.Type, _: T.Type)
+public func expectSequenceType<X>(_ x: X) -> X where X : Swift.Sequence
+public func expectCollectionType<X>(_ x: X.Type) where X : Swift.Collection
+public func expectMutableCollectionType<X>(_ x: X.Type) where X : Swift.MutableCollection
+public func expectSliceType<X>(_ sliceType: X.Type) where X : Swift.Collection, X == X.SubSequence
+public func expectMutableSliceType<X>(_ mutableSliceType: X.Type) where X : Swift.MutableCollection, X == X.SubSequence
+public func expectSequenceAssociatedTypes<X>(sequenceType: X.Type, iteratorType: X.Iterator.Type) where X : Swift.Sequence
+public func expectCollectionAssociatedTypes<X>(collectionType: X.Type, iteratorType: X.Iterator.Type, subSequenceType: X.SubSequence.Type, indexType: X.Index.Type, indicesType: X.Indices.Type) where X : Swift.Collection
+public func expectBidirectionalCollectionAssociatedTypes<X>(collectionType: X.Type, iteratorType: X.Iterator.Type, subSequenceType: X.SubSequence.Type, indexType: X.Index.Type, indicesType: X.Indices.Type) where X : Swift.BidirectionalCollection
+public func expectRandomAccessCollectionAssociatedTypes<X>(collectionType: X.Type, iteratorType: X.Iterator.Type, subSequenceType: X.SubSequence.Type, indexType: X.Index.Type, indicesType: X.Indices.Type) where X : Swift.RandomAccessCollection
+public struct AssertionResult : Swift.CustomStringConvertible {
+  public func withDescription(_ description: Swift.String) -> StdlibUnittest.AssertionResult
+  public var description: Swift.String
+}
+public func assertionSuccess() -> StdlibUnittest.AssertionResult
+public func assertionFailure() -> StdlibUnittest.AssertionResult
+public func expectUnreachable(_ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectUnreachableCatch(_ error: Swift.Error, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectTrue(_ actual: StdlibUnittest.AssertionResult, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectFalse(_ actual: StdlibUnittest.AssertionResult, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectTrue(_ actual: Swift.Bool, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectFalse(_ actual: Swift.Bool, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectThrows<ErrorType>(_ expectedError: ErrorType? = nil, _ test: () throws -> Swift.Void, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where ErrorType : Swift.Equatable, ErrorType : Swift.Error
+public func expectDoesNotThrow(_ test: () throws -> Swift.Void, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectNil<T>(_ value: T?, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+@discardableResult
+public func expectNotNil<T>(_ value: T?, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) -> T?
+public func expectCrashLater(withMessage message: Swift.String = "")
+public func expectCrash(withMessage message: Swift.String = "", executing: () -> Swift.Void) -> Swift.Never
+public func _setTestSuiteFailedCallback(_ callback: @escaping () -> Swift.Void)
+public func _setTrappingExpectationFailedCallback(callback: @escaping () -> Swift.Void)
+public func runNoTests()
+public func runAllTests()
+final public class TestSuite {
+  public init(_ name: Swift.String)
+  @inline(never) final public func test(_ name: Swift.String, file: Swift.String = #file, line: Swift.UInt = #line, _ testFunction: @escaping () -> Swift.Void)
+  @inline(never) final public func test(_ name: Swift.String, file: Swift.String = #file, line: Swift.UInt = #line) -> StdlibUnittest.TestSuite._TestBuilder
+  final public func setUp(_ code: @escaping () -> Swift.Void)
+  final public func tearDown(_ code: @escaping () -> Swift.Void)
+  public struct _TestBuilder {
+    public func xfail(_ predicate: StdlibUnittest.TestRunPredicate) -> StdlibUnittest.TestSuite._TestBuilder
+    public func skip(_ predicate: StdlibUnittest.TestRunPredicate) -> StdlibUnittest.TestSuite._TestBuilder
+    public func stdin(_ stdinText: Swift.String, eof: Swift.Bool = false) -> StdlibUnittest.TestSuite._TestBuilder
+    public func crashOutputMatches(_ string: Swift.String) -> StdlibUnittest.TestSuite._TestBuilder
+    public func requireOwnProcess() -> StdlibUnittest.TestSuite._TestBuilder
+    public func code(_ testFunction: @escaping () -> Swift.Void)
+    public func forEach<Data>(in parameterSets: [Data], testFunction: @escaping (Data) -> Swift.Void)
+  }
+  @objc deinit
+}
+public enum OSVersion : Swift.CustomStringConvertible {
+  case osx(major: Swift.Int, minor: Swift.Int, bugFix: Swift.Int)
+  case iOS(major: Swift.Int, minor: Swift.Int, bugFix: Swift.Int)
+  case tvOS(major: Swift.Int, minor: Swift.Int, bugFix: Swift.Int)
+  case watchOS(major: Swift.Int, minor: Swift.Int, bugFix: Swift.Int)
+  case iOSSimulator
+  case tvOSSimulator
+  case watchOSSimulator
+  case linux
+  case freeBSD
+  case openBSD
+  case android
+  case ps4
+  case windowsCygnus
+  case windows
+  case haiku
+  case wasi
+  public var description: Swift.String {
+    get
+  }
+}
+public func _parseDottedVersionTriple(_ s: Swift.String) -> (Swift.Int, Swift.Int, Swift.Int)
+public func _setOverrideOSVersion(_ v: StdlibUnittest.OSVersion)
+public enum TestRunPredicate : Swift.CustomStringConvertible {
+  case custom(() -> Swift.Bool, reason: Swift.String)
+  case always(Swift.String)
+  case never
+  case osxAny(Swift.String)
+  case osxMajor(Swift.Int, reason: Swift.String)
+  case osxMinor(Swift.Int, Swift.Int, reason: Swift.String)
+  case osxMinorRange(Swift.Int, Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case osxBugFix(Swift.Int, Swift.Int, Swift.Int, reason: Swift.String)
+  case osxBugFixRange(Swift.Int, Swift.Int, Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case iOSAny(Swift.String)
+  case iOSMajor(Swift.Int, reason: Swift.String)
+  case iOSMajorRange(Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case iOSMinor(Swift.Int, Swift.Int, reason: Swift.String)
+  case iOSMinorRange(Swift.Int, Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case iOSBugFix(Swift.Int, Swift.Int, Swift.Int, reason: Swift.String)
+  case iOSBugFixRange(Swift.Int, Swift.Int, Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case iOSSimulatorAny(Swift.String)
+  case tvOSAny(Swift.String)
+  case tvOSMajor(Swift.Int, reason: Swift.String)
+  case tvOSMajorRange(Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case tvOSMinor(Swift.Int, Swift.Int, reason: Swift.String)
+  case tvOSMinorRange(Swift.Int, Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case tvOSBugFix(Swift.Int, Swift.Int, Swift.Int, reason: Swift.String)
+  case tvOSBugFixRange(Swift.Int, Swift.Int, Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case tvOSSimulatorAny(Swift.String)
+  case watchOSAny(Swift.String)
+  case watchOSMajor(Swift.Int, reason: Swift.String)
+  case watchOSMajorRange(Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case watchOSMinor(Swift.Int, Swift.Int, reason: Swift.String)
+  case watchOSMinorRange(Swift.Int, Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case watchOSBugFix(Swift.Int, Swift.Int, Swift.Int, reason: Swift.String)
+  case watchOSBugFixRange(Swift.Int, Swift.Int, Swift.ClosedRange<Swift.Int>, reason: Swift.String)
+  case watchOSSimulatorAny(Swift.String)
+  case linuxAny(reason: Swift.String)
+  case freeBSDAny(reason: Swift.String)
+  case ps4Any(reason: Swift.String)
+  case androidAny(reason: Swift.String)
+  case windowsAny(reason: Swift.String)
+  case windowsCygnusAny(reason: Swift.String)
+  case haikuAny(reason: Swift.String)
+  case objCRuntime(Swift.String)
+  case nativeRuntime(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+  public func evaluate() -> Swift.Bool
+}
+public func checkEquatable<Instances>(_ instances: Instances, oracle: (Instances.Index, Instances.Index) -> Swift.Bool, allowBrokenTransitivity: Swift.Bool = false, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Instances : Swift.Collection, Instances.Element : Swift.Equatable
+public func checkEquatable<T>(_ expectedEqual: Swift.Bool, _ lhs: T, _ rhs: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Equatable
+public func checkHashableGroups<Groups>(_ groups: Groups, _ message: @autoclosure () -> Swift.String = "", allowIncompleteHashing: Swift.Bool = false, stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Groups : Swift.Collection, Groups.Element : Swift.Collection, Groups.Element.Element : Swift.Hashable
+public func checkHashable<Instances>(_ instances: Instances, equalityOracle: (Instances.Index, Instances.Index) -> Swift.Bool, allowBrokenTransitivity: Swift.Bool = false, allowIncompleteHashing: Swift.Bool = false, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Instances : Swift.Collection, Instances.Element : Swift.Hashable
+public func checkHashable<Instances>(_ instances: Instances, equalityOracle: (Instances.Index, Instances.Index) -> Swift.Bool, hashEqualityOracle: (Instances.Index, Instances.Index) -> Swift.Bool, allowBrokenTransitivity: Swift.Bool = false, allowIncompleteHashing: Swift.Bool = false, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Instances : Swift.Collection, Instances.Element : Swift.Hashable
+public func checkHashable<T>(expectedEqual: Swift.Bool, _ lhs: T, _ rhs: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Hashable
+public enum ExpectedComparisonResult {
+  case lt, eq, gt
+  public func isLT() -> Swift.Bool
+  public func isEQ() -> Swift.Bool
+  public func isGT() -> Swift.Bool
+  public func isLE() -> Swift.Bool
+  public func isGE() -> Swift.Bool
+  public func isNE() -> Swift.Bool
+  public func flip() -> StdlibUnittest.ExpectedComparisonResult
+  public static func == (a: StdlibUnittest.ExpectedComparisonResult, b: StdlibUnittest.ExpectedComparisonResult) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+extension ExpectedComparisonResult : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public func checkComparable<Instances>(_ instances: Instances, oracle: (Instances.Index, Instances.Index) -> StdlibUnittest.ExpectedComparisonResult, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Instances : Swift.Collection, Instances.Element : Swift.Comparable
+public func checkComparable<T>(_ expected: StdlibUnittest.ExpectedComparisonResult, _ lhs: T, _ rhs: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Comparable
+public func checkStrideable<Instances, Strides>(_ instances: Instances, strides: Strides, distanceOracle: (Instances.Index, Instances.Index) -> Strides.Element, advanceOracle: (Instances.Index, Strides.Index) -> Instances.Element, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Instances : Swift.Collection, Strides : Swift.Collection, Instances.Element : Swift.Strideable, Strides.Element == Instances.Element.Stride
+public func checkLosslessStringConvertible<Instance>(_ instances: [Instance]) where Instance : Swift.Equatable, Instance : Swift.LosslessStringConvertible
+public func nthIndex<C>(_ x: C, _ n: Swift.Int) -> C.Index where C : Swift.Collection
+public func nth<C>(_ x: C, _ n: Swift.Int) -> C.Element where C : Swift.Collection
+public func expectEqualSequence<Expected, Actual>(_ expected: Expected, _ actual: Actual, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Expected : Swift.Sequence, Actual : Swift.Sequence, Expected.Element : Swift.Equatable, Expected.Element == Actual.Element
+public func expectEqualSequence<Expected, Actual, T, U>(_ expected: Expected, _ actual: Actual, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Expected : Swift.Sequence, Actual : Swift.Sequence, T : Swift.Equatable, U : Swift.Equatable, Expected.Element == (T, U), Actual.Element == (T, U)
+public func expectEqualSequence<Expected, Actual>(_ expected: Expected, _ actual: Actual, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line, sameValue: (Expected.Element, Expected.Element) -> Swift.Bool) where Expected : Swift.Sequence, Actual : Swift.Sequence, Expected.Element == Actual.Element
+public func expectEqualsUnordered<Expected, Actual>(_ expected: Expected, _ actual: Actual, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line, compare: @escaping (Expected.Element, Expected.Element) -> StdlibUnittest.ExpectedComparisonResult) where Expected : Swift.Sequence, Actual : Swift.Sequence, Expected.Element == Actual.Element
+public func expectEqualsUnordered<Expected, Actual>(_ expected: Expected, _ actual: Actual, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Expected : Swift.Sequence, Actual : Swift.Sequence, Expected.Element : Swift.Comparable, Expected.Element == Actual.Element
+public func expectEqualsUnordered<T>(_ expected: [T], _ actual: [T], _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Comparable
+public func expectEqualsUnordered<T>(_ expected: Swift.Range<T>, _ actual: [T], _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where T : Swift.Strideable, T.Stride : Swift.SignedInteger
+public func expectEqualsUnordered<Expected, Actual, T>(_ expected: Expected, _ actual: Actual, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where Expected : Swift.Sequence, Actual : Swift.Sequence, T : Swift.Comparable, Expected.Element == (T, T), Actual.Element == (key: T, value: T)
+public func expectEqualFunctionsForDomain<ArgumentType, Result>(_ arguments: [ArgumentType], _ function1: (ArgumentType) -> Result, _ function2: (ArgumentType) -> Result) where Result : Swift.Equatable
+public func expectEqualMethodsForDomain<SelfType, ArgumentType, Result>(_ selfs: [SelfType], _ arguments: [ArgumentType], _ function1: (SelfType) -> (ArgumentType) -> Result, _ function2: (SelfType) -> (ArgumentType) -> Result) where Result : Swift.Equatable
+public func expectEqualUnicodeScalars<S>(_ expected: [Swift.UInt32], _ actual: S, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where S : Swift.StringProtocol
+public func checkStrideable<S>(instances: [S], distances: [S.Stride], distanceOracle: (Swift.Int, Swift.Int) -> S.Stride, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line) where S : Swift.Strideable
+public enum SwiftRuntime {
+  public static func metadataKind<T>(of value: T) -> Swift.String
+}
+final public class LifetimeTracked {
+  public init(_ value: Swift.Int, identity: Swift.Int = 0)
+  @objc deinit
+  public static var instances: Swift.Int
+  final public let value: Swift.Int
+  final public var identity: Swift.Int
+  final public var serialNumber: Swift.Int
+}
+extension LifetimeTracked : Swift.Equatable {
+  public static func == (x: StdlibUnittest.LifetimeTracked, y: StdlibUnittest.LifetimeTracked) -> Swift.Bool
+}
+extension LifetimeTracked : Swift.Hashable {
+  final public var hashValue: Swift.Int {
+    get
+  }
+  final public func hash(into hasher: inout Swift.Hasher)
+}
+extension LifetimeTracked : Swift.Strideable {
+  final public func distance(to other: StdlibUnittest.LifetimeTracked) -> Swift.Int
+  final public func advanced(by n: Swift.Int) -> StdlibUnittest.LifetimeTracked
+  public typealias Stride = Swift.Int
+}
+extension LifetimeTracked : Swift.CustomStringConvertible {
+  final public var description: Swift.String {
+    get
+  }
+}
+public func < (x: StdlibUnittest.LifetimeTracked, y: StdlibUnittest.LifetimeTracked) -> Swift.Bool
+public struct OpaqueValue<Underlying> {
+  public var value: Underlying
+  public var identity: Swift.Int
+  public init(_ value: Underlying)
+  public init(_ value: Underlying, identity: Swift.Int)
+}
+public struct MinimalEquatableValue : Swift.Equatable {
+  public static var timesEqualEqualWasCalled: Swift.Int
+  public static var equalImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.Bool>
+  public var value: Swift.Int
+  public var identity: Swift.Int
+  public init(_ value: Swift.Int)
+  public init(_ value: Swift.Int, identity: Swift.Int)
+  public static func == (lhs: StdlibUnittest.MinimalEquatableValue, rhs: StdlibUnittest.MinimalEquatableValue) -> Swift.Bool
+}
+public struct MinimalComparableValue : Swift.Equatable, Swift.Comparable {
+  public static var timesEqualEqualWasCalled: StdlibUnittest.ResettableValue<Swift.Int>
+  public static var timesLessWasCalled: StdlibUnittest.ResettableValue<Swift.Int>
+  public static var equalImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.Bool>
+  public static var lessImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.Bool>
+  public var value: Swift.Int
+  public var identity: Swift.Int
+  public init(_ value: Swift.Int)
+  public init(_ value: Swift.Int, identity: Swift.Int)
+  public static func == (lhs: StdlibUnittest.MinimalComparableValue, rhs: StdlibUnittest.MinimalComparableValue) -> Swift.Bool
+  public static func < (lhs: StdlibUnittest.MinimalComparableValue, rhs: StdlibUnittest.MinimalComparableValue) -> Swift.Bool
+}
+public struct MinimalHashableValue : Swift.Equatable, Swift.Hashable {
+  public static var timesEqualEqualWasCalled: Swift.Int
+  public static var timesHashIntoWasCalled: Swift.Int
+  public static var equalImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.Bool>
+  public static var hashIntoImpl: StdlibUnittest.ResettableValue<(Swift.Int, inout Swift.Hasher) -> Swift.Void>
+  public var value: Swift.Int
+  public var identity: Swift.Int
+  public init(_ value: Swift.Int)
+  public init(_ value: Swift.Int, identity: Swift.Int)
+  public static func == (lhs: StdlibUnittest.MinimalHashableValue, rhs: StdlibUnittest.MinimalHashableValue) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+extension MinimalHashableValue : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public class MinimalHashableClass : Swift.Equatable, Swift.Hashable {
+  public static var timesEqualEqualWasCalled: Swift.Int
+  public static var timesHashIntoWasCalled: Swift.Int
+  public static var equalImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.Bool>
+  public static var hashIntoImpl: StdlibUnittest.ResettableValue<(Swift.Int, inout Swift.Hasher) -> Swift.Void>
+  public var value: Swift.Int
+  public var identity: Swift.Int
+  public init(_ value: Swift.Int)
+  public init(_ value: Swift.Int, identity: Swift.Int)
+  public static func == (lhs: StdlibUnittest.MinimalHashableClass, rhs: StdlibUnittest.MinimalHashableClass) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  @objc deinit
+}
+extension MinimalHashableClass : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public var GenericMinimalHashableValue_timesEqualEqualWasCalled: Swift.Int
+public var GenericMinimalHashableValue_timesHashIntoWasCalled: Swift.Int
+public var GenericMinimalHashableValue_equalImpl: StdlibUnittest.ResettableValue<(Any, Any) -> Swift.Bool>
+public var GenericMinimalHashableValue_hashIntoImpl: StdlibUnittest.ResettableValue<(Any, inout Swift.Hasher) -> Swift.Void>
+public struct GenericMinimalHashableValue<Wrapped> : Swift.Equatable, Swift.Hashable {
+  public var value: Wrapped
+  public var identity: Swift.Int
+  public init(_ value: Wrapped)
+  public init(_ value: Wrapped, identity: Swift.Int)
+  public static func == <Wrapped>(lhs: StdlibUnittest.GenericMinimalHashableValue<Wrapped>, rhs: StdlibUnittest.GenericMinimalHashableValue<Wrapped>) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+extension GenericMinimalHashableValue : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public var GenericMinimalHashableClass_timesEqualEqualWasCalled: Swift.Int
+public var GenericMinimalHashableClass_timesHashIntoWasCalled: Swift.Int
+public var GenericMinimalHashableClass_equalImpl: StdlibUnittest.ResettableValue<(Any, Any) -> Swift.Bool>
+public var GenericMinimalHashableClass_hashIntoImpl: StdlibUnittest.ResettableValue<(Any, inout Swift.Hasher) -> Swift.Void>
+public class GenericMinimalHashableClass<Wrapped> : Swift.Equatable, Swift.Hashable {
+  public var value: Wrapped
+  public var identity: Swift.Int
+  public init(_ value: Wrapped)
+  public init(_ value: Wrapped, identity: Swift.Int)
+  public static func == <Wrapped>(lhs: StdlibUnittest.GenericMinimalHashableClass<Wrapped>, rhs: StdlibUnittest.GenericMinimalHashableClass<Wrapped>) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  @objc deinit
+}
+extension GenericMinimalHashableClass : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct MinimalStrideableValue : Swift.Equatable, Swift.Comparable, Swift.Strideable {
+  public static var timesEqualEqualWasCalled: StdlibUnittest.ResettableValue<Swift.Int>
+  public static var timesLessWasCalled: StdlibUnittest.ResettableValue<Swift.Int>
+  public static var timesDistanceWasCalled: StdlibUnittest.ResettableValue<Swift.Int>
+  public static var timesAdvancedWasCalled: StdlibUnittest.ResettableValue<Swift.Int>
+  public static var equalImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.Bool>
+  public static var lessImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.Bool>
+  public var value: Swift.Int
+  public var identity: Swift.Int
+  public init(_ value: Swift.Int)
+  public init(_ value: Swift.Int, identity: Swift.Int)
+  public typealias Stride = Swift.Int
+  public static func == (lhs: StdlibUnittest.MinimalStrideableValue, rhs: StdlibUnittest.MinimalStrideableValue) -> Swift.Bool
+  public static func < (lhs: StdlibUnittest.MinimalStrideableValue, rhs: StdlibUnittest.MinimalStrideableValue) -> Swift.Bool
+  public func distance(to other: StdlibUnittest.MinimalStrideableValue) -> StdlibUnittest.MinimalStrideableValue.Stride
+  public func advanced(by n: StdlibUnittest.MinimalStrideableValue.Stride) -> StdlibUnittest.MinimalStrideableValue
+}
+public func _opaqueIdentity<T>(_ x: T) -> T
+public func _blackHole<T>(_ x: T)
+@inline(never) public func getBool(_ x: Swift.Bool) -> Swift.Bool
+@inline(never) public func getInt8(_ x: Swift.Int8) -> Swift.Int8
+@inline(never) public func getInt16(_ x: Swift.Int16) -> Swift.Int16
+@inline(never) public func getInt32(_ x: Swift.Int32) -> Swift.Int32
+@inline(never) public func getInt64(_ x: Swift.Int64) -> Swift.Int64
+@inline(never) public func getInt(_ x: Swift.Int) -> Swift.Int
+@inline(never) public func getUInt8(_ x: Swift.UInt8) -> Swift.UInt8
+@inline(never) public func getUInt16(_ x: Swift.UInt16) -> Swift.UInt16
+@inline(never) public func getUInt32(_ x: Swift.UInt32) -> Swift.UInt32
+@inline(never) public func getUInt64(_ x: Swift.UInt64) -> Swift.UInt64
+@inline(never) public func getUInt(_ x: Swift.UInt) -> Swift.UInt
+@inline(never) public func getFloat32(_ x: Swift.Float32) -> Swift.Float32
+@inline(never) public func getFloat64(_ x: Swift.Float64) -> Swift.Float64
+@inline(never) public func getFloat80(_ x: Swift.Float80) -> Swift.Float80
+public func getPointer(_ x: Swift.OpaquePointer) -> Swift.OpaquePointer
+public protocol RaceTestWithPerTrialData {
+  associatedtype RaceData : AnyObject
+  associatedtype ThreadLocalData
+  associatedtype Observation
+  init()
+  func makeRaceData() -> Self.RaceData
+  func makeThreadLocalData() -> Self.ThreadLocalData
+  func thread1(_ raceData: Self.RaceData, _ threadLocalData: inout Self.ThreadLocalData) -> Self.Observation
+  func evaluateObservations(_ observations: [Self.Observation], _ sink: (StdlibUnittest.RaceTestObservationEvaluation) -> Swift.Void)
+}
+public enum RaceTestObservationEvaluation : Swift.Equatable, Swift.CustomStringConvertible {
+  case pass
+  case passInteresting(Swift.String)
+  case failure
+  case failureInteresting(Swift.String)
+  public var description: Swift.String {
+    get
+  }
+}
+public func == (lhs: StdlibUnittest.RaceTestObservationEvaluation, rhs: StdlibUnittest.RaceTestObservationEvaluation) -> Swift.Bool
+public struct Observation1UInt : Swift.Equatable, Swift.CustomStringConvertible {
+  public var data1: Swift.UInt
+  public init(_ data1: Swift.UInt)
+  public var description: Swift.String {
+    get
+  }
+}
+public func == (lhs: StdlibUnittest.Observation1UInt, rhs: StdlibUnittest.Observation1UInt) -> Swift.Bool
+public struct Observation4UInt : Swift.Equatable, Swift.CustomStringConvertible {
+  public var data1: Swift.UInt
+  public var data2: Swift.UInt
+  public var data3: Swift.UInt
+  public var data4: Swift.UInt
+  public init(_ data1: Swift.UInt, _ data2: Swift.UInt, _ data3: Swift.UInt, _ data4: Swift.UInt)
+  public var description: Swift.String {
+    get
+  }
+}
+public func == (lhs: StdlibUnittest.Observation4UInt, rhs: StdlibUnittest.Observation4UInt) -> Swift.Bool
+public struct Observation3Int : Swift.Equatable, Swift.CustomStringConvertible {
+  public var data1: Swift.Int
+  public var data2: Swift.Int
+  public var data3: Swift.Int
+  public init(_ data1: Swift.Int, _ data2: Swift.Int, _ data3: Swift.Int)
+  public var description: Swift.String {
+    get
+  }
+}
+public func == (lhs: StdlibUnittest.Observation3Int, rhs: StdlibUnittest.Observation3Int) -> Swift.Bool
+public struct Observation4Int : Swift.Equatable, Swift.CustomStringConvertible {
+  public var data1: Swift.Int
+  public var data2: Swift.Int
+  public var data3: Swift.Int
+  public var data4: Swift.Int
+  public init(_ data1: Swift.Int, _ data2: Swift.Int, _ data3: Swift.Int, _ data4: Swift.Int)
+  public var description: Swift.String {
+    get
+  }
+}
+public func == (lhs: StdlibUnittest.Observation4Int, rhs: StdlibUnittest.Observation4Int) -> Swift.Bool
+public struct Observation5Int : Swift.Equatable, Swift.CustomStringConvertible {
+  public var data1: Swift.Int
+  public var data2: Swift.Int
+  public var data3: Swift.Int
+  public var data4: Swift.Int
+  public var data5: Swift.Int
+  public init(_ data1: Swift.Int, _ data2: Swift.Int, _ data3: Swift.Int, _ data4: Swift.Int, _ data5: Swift.Int)
+  public var description: Swift.String {
+    get
+  }
+}
+public func == (lhs: StdlibUnittest.Observation5Int, rhs: StdlibUnittest.Observation5Int) -> Swift.Bool
+public struct Observation9Int : Swift.Equatable, Swift.CustomStringConvertible {
+  public var data1: Swift.Int
+  public var data2: Swift.Int
+  public var data3: Swift.Int
+  public var data4: Swift.Int
+  public var data5: Swift.Int
+  public var data6: Swift.Int
+  public var data7: Swift.Int
+  public var data8: Swift.Int
+  public var data9: Swift.Int
+  public init(_ data1: Swift.Int, _ data2: Swift.Int, _ data3: Swift.Int, _ data4: Swift.Int, _ data5: Swift.Int, _ data6: Swift.Int, _ data7: Swift.Int, _ data8: Swift.Int, _ data9: Swift.Int)
+  public var description: Swift.String {
+    get
+  }
+}
+public func == (lhs: StdlibUnittest.Observation9Int, rhs: StdlibUnittest.Observation9Int) -> Swift.Bool
+public func evaluateObservationsAllEqual<T>(_ observations: [T]) -> StdlibUnittest.RaceTestObservationEvaluation where T : Swift.Equatable
+public func runRaceTest<RT>(_: RT.Type, trials: Swift.Int, timeoutInSeconds: Swift.Int? = nil, threads: Swift.Int? = nil) where RT : StdlibUnittest.RaceTestWithPerTrialData
+public func runRaceTest<RT>(_ test: RT.Type, operations: Swift.Int, timeoutInSeconds: Swift.Int? = nil, threads: Swift.Int? = nil) where RT : StdlibUnittest.RaceTestWithPerTrialData
+public func consumeCPU(units amountOfWork: Swift.Int)
+public func runRaceTest(trials: Swift.Int, timeoutInSeconds: Swift.Int? = nil, threads: Swift.Int? = nil, invoking body: @escaping () -> Swift.Void)
+public func runRaceTest(operations: Swift.Int, timeoutInSeconds: Swift.Int? = nil, threads: Swift.Int? = nil, invoking body: @escaping () -> Swift.Void)
+public func chiSquaredUniform2(_ trials: Swift.Int, _ observedACount: Swift.Int, _ pValue: Swift.Double) -> Swift.Bool
+public func createTemporaryFile(_ fileNamePrefix: Swift.String, _ fileNameSuffix: Swift.String, _ contents: Swift.String) -> Swift.String
+final public class Box<T> {
+  public init(_ value: T)
+  final public var value: T
+  @objc deinit
+}
+infix operator <=> : DefaultPrecedence
+public func <=> <T>(lhs: T, rhs: T) -> StdlibUnittest.ExpectedComparisonResult where T : Swift.Comparable
+public struct TypeIdentifier : Swift.Hashable, Swift.Comparable {
+  public var value: Any.Type
+  public init(_ value: Any.Type)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+public func < (lhs: StdlibUnittest.TypeIdentifier, rhs: StdlibUnittest.TypeIdentifier) -> Swift.Bool
+public func == (lhs: StdlibUnittest.TypeIdentifier, rhs: StdlibUnittest.TypeIdentifier) -> Swift.Bool
+extension TypeIdentifier : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+public func forAllPermutations(_ size: Swift.Int, _ body: ([Swift.Int]) -> Swift.Void)
+public func forAllPermutations<S>(_ sequence: S, _ body: ([S.Element]) -> Swift.Void) where S : Swift.Sequence
+public func cartesianProduct<C1, C2>(_ c1: C1, _ c2: C2) -> [(C1.Element, C2.Element)] where C1 : Swift.Collection, C2 : Swift.Collection
+public func _isStdlibDebugConfiguration() -> Swift.Bool
+public func _hasSwift_5_1() -> Swift.Bool
+@frozen public struct LinearCongruentialGenerator : Swift.RandomNumberGenerator {
+  @usableFromInline
+  internal var _state: Swift.UInt64
+  @inlinable public init(seed: Swift.UInt64) {
+    _state = seed
+    for _ in 0 ..< 10 { _ = next() }
+  }
+  @inlinable public mutating func next() -> Swift.UInt64 {
+    _state = 2862933555777941757 &* _state &+ 3037000493
+    return _state
+  }
+}
+public struct CustomPrintableValue : Swift.Equatable, Swift.Comparable, Swift.Hashable, Swift.Strideable {
+  public static var timesDescriptionWasCalled: StdlibUnittest.ResettableValue<Swift.Int>
+  public static var timesDebugDescriptionWasCalled: StdlibUnittest.ResettableValue<Swift.Int>
+  public static var descriptionImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.String>
+  public static var debugDescriptionImpl: StdlibUnittest.ResettableValue<(Swift.Int, Swift.Int) -> Swift.String>
+  public var value: Swift.Int
+  public var identity: Swift.Int
+  public init(_ value: Swift.Int)
+  public init(_ value: Swift.Int, identity: Swift.Int)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public typealias Stride = Swift.Int
+  public func distance(to other: StdlibUnittest.CustomPrintableValue) -> StdlibUnittest.CustomPrintableValue.Stride
+  public func advanced(by n: StdlibUnittest.CustomPrintableValue.Stride) -> StdlibUnittest.CustomPrintableValue
+}
+public func == (lhs: StdlibUnittest.CustomPrintableValue, rhs: StdlibUnittest.CustomPrintableValue) -> Swift.Bool
+public func < (lhs: StdlibUnittest.CustomPrintableValue, rhs: StdlibUnittest.CustomPrintableValue) -> Swift.Bool
+extension CustomPrintableValue : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension CustomPrintableValue : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+public func expectPrinted<T>(expectedOneOf patterns: [Swift.String], _ object: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectPrinted<T>(_ expected: Swift.String, _ object: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectDebugPrinted<T>(expectedOneOf patterns: [Swift.String], _ object: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectDebugPrinted<T>(_ expected: Swift.String, _ object: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func expectDumped<T>(_ expected: Swift.String, _ object: T, _ message: @autoclosure () -> Swift.String = "", stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), showFrame: Swift.Bool = true, file: Swift.String = #file, line: Swift.UInt = #line)
+public func pointerToSwiftCoreSymbol(name: Swift.String) -> Swift.UnsafeMutableRawPointer?
+@_silgen_name("_swift_StdlibUnittest_make_swift_object")
+public func make_swift_object() -> Swift.AnyObject
+public class ResettableValue<Value> {
+  public init(_ value: Value)
+  public func reset()
+  final public let defaultValue: Value
+  public var value: Value
+  @objc deinit
+}
+public class TypeIndexed<Value> {
+  public init(_ value: Value)
+  public subscript(t: Any.Type) -> Value {
+    get
+    set
+  }
+  public func reset()
+  @objc deinit
+}
+extension TypeIndexed where Value : Swift.Strideable {
+  public func expectIncrement<R>(_ t: Any.Type, _ message: @autoclosure () -> Swift.String = "", showFrame: Swift.Bool = true, stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), file: Swift.String = #file, line: Swift.UInt = #line, invoking body: () -> R) -> R
+}
+extension TypeIndexed where Value : Swift.Equatable {
+  public func expectUnchanged<R>(_ t: Any.Type, _ message: @autoclosure () -> Swift.String = "", showFrame: Swift.Bool = true, stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), file: Swift.String = #file, line: Swift.UInt = #line, invoking body: () -> R) -> R
+}
+public func <=> <T>(lhs: (StdlibUnittest.TypeIdentifier, T), rhs: (StdlibUnittest.TypeIdentifier, T)) -> StdlibUnittest.ExpectedComparisonResult where T : Swift.Comparable
+public func expectEqual<V>(_ expected: Swift.KeyValuePairs<Any.Type, V>, _ actual: StdlibUnittest.TypeIndexed<V>, _ message: @autoclosure () -> Swift.String = "", showFrame: Swift.Bool = true, stackTrace: StdlibUnittest.SourceLocStack = SourceLocStack(), file: Swift.String = #file, line: Swift.UInt = #line) where V : Swift.Comparable
+extension StdlibUnittest.ExpectedComparisonResult : Swift.Equatable {}
+extension StdlibUnittest.ExpectedComparisonResult : Swift.Hashable {}

@@ -1,0 +1,33 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Swift version 5.3-dev (LLVM c377dba73da1364, Swift 4419f879adac304)
+// swift-module-flags: -target x86_64-apple-macosx10.9 -enable-objc-interop -enable-library-evolution -module-link-name swiftSwiftReflectionTest -swift-version 5 -O -enforce-exclusivity=unchecked -module-name SwiftReflectionTest
+import Darwin
+import MachO
+import Swift
+public enum InstanceKind : Swift.UInt8 {
+  case None
+  case Object
+  case Existential
+  case ErrorExistential
+  case Closure
+  case Enum
+  case EnumValue
+  public typealias RawValue = Swift.UInt8
+  public init?(rawValue: Swift.UInt8)
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+public func reflect(object: Swift.AnyObject)
+public func reflect<T>(any: T, kind: SwiftReflectionTest.InstanceKind = .Existential)
+public func reflect<T>(error: T) where T : Swift.Error
+public func reflect<T>(enum value: T)
+public func reflect<T>(enumValue value: T)
+public func reflect(function: @escaping () -> Swift.Void)
+public func reflect(function: @escaping (Swift.Int) -> Swift.Void)
+public func reflect(function: @escaping (Swift.Int, Swift.String) -> Swift.Void)
+public func reflect(function: @escaping (Swift.Int, Swift.String, Swift.AnyObject?) -> Swift.Void)
+public func doneReflecting()
+extension SwiftReflectionTest.InstanceKind : Swift.Equatable {}
+extension SwiftReflectionTest.InstanceKind : Swift.Hashable {}
+extension SwiftReflectionTest.InstanceKind : Swift.RawRepresentable {}

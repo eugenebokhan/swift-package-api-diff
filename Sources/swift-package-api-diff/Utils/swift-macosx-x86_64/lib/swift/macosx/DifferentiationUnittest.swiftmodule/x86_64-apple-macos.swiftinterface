@@ -1,0 +1,243 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Swift version 5.3-dev (LLVM c377dba73da1364, Swift 4419f879adac304)
+// swift-module-flags: -target x86_64-apple-macosx10.9 -enable-objc-interop -enable-library-evolution -module-link-name swiftDifferentiationUnittest -swift-version 5 -O -enforce-exclusivity=unchecked -module-name DifferentiationUnittest
+import StdlibUnittest
+import Swift
+@_exported import _Differentiation
+public enum _GlobalLeakCount {
+  public static var count: Swift.Int
+}
+public func withLeakChecking(expectedLeakCount: Swift.Int = 0, file: Swift.String = #file, line: Swift.UInt = #line, _ body: () -> Swift.Void)
+extension TestSuite {
+  final public func testWithLeakChecking(_ name: Swift.String, expectedLeakCount: Swift.Int = 0, file: Swift.String = #file, line: Swift.UInt = #line, _ testFunction: @escaping () -> Swift.Void)
+}
+public struct Tracked<T> {
+  @differentiable(wrt: value where T : _Differentiation.Differentiable, T == T.TangentVector)
+  public init(_ value: T)
+  public var value: T {
+    @differentiable(wrt: self where T : _Differentiation.Differentiable, T == T.TangentVector)
+    get
+    set
+  }
+}
+@frozen public struct NonresilientTracked<T> {
+  @_hasMissingDesignatedInitializers @usableFromInline
+  internal class Box {
+    @objc deinit
+  }
+  @usableFromInline
+  internal var handle: DifferentiationUnittest.NonresilientTracked<T>.Box
+  @differentiable(wrt: value where T : _Differentiation.Differentiable, T == T.TangentVector)
+  public init(_ value: T)
+  public var value: T {
+    @differentiable(wrt: self where T : _Differentiation.Differentiable, T == T.TangentVector)
+    get
+    set
+  }
+}
+extension Tracked : Swift.ExpressibleByFloatLiteral where T : Swift.ExpressibleByFloatLiteral {
+  public init(floatLiteral value: T.FloatLiteralType)
+  public typealias FloatLiteralType = T.FloatLiteralType
+}
+extension Tracked : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension Tracked : Swift.ExpressibleByIntegerLiteral where T : Swift.ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: T.IntegerLiteralType)
+  public typealias IntegerLiteralType = T.IntegerLiteralType
+}
+extension Tracked : Swift.Comparable where T : Swift.Comparable {
+  public static func < (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> Swift.Bool
+  public static func <= (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> Swift.Bool
+  public static func > (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> Swift.Bool
+  public static func >= (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> Swift.Bool
+}
+extension Tracked : Swift.AdditiveArithmetic where T : Swift.AdditiveArithmetic {
+  public static var zero: DifferentiationUnittest.Tracked<T> {
+    get
+  }
+  public static func + (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> DifferentiationUnittest.Tracked<T>
+  public static func - (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> DifferentiationUnittest.Tracked<T>
+}
+extension Tracked : Swift.Equatable where T : Swift.Equatable {
+  public static func == (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> Swift.Bool
+}
+extension Tracked : Swift.SignedNumeric where T : Swift.SignedNumeric, T == T.Magnitude {
+  public typealias Magnitude = DifferentiationUnittest.Tracked<T.Magnitude>
+  public init?<U>(exactly source: U) where U : Swift.BinaryInteger
+  public var magnitude: DifferentiationUnittest.Tracked<T>.Magnitude {
+    get
+  }
+  public static func * (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> DifferentiationUnittest.Tracked<T>
+  public static func *= (lhs: inout DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>)
+}
+extension Tracked where T : Swift.FloatingPoint {
+  public static func / (lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> DifferentiationUnittest.Tracked<T>
+  public static func /= (lhs: inout DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>)
+}
+extension Tracked : Swift.Strideable where T : Swift.Strideable, T.Stride == T.Stride.Magnitude {
+  public typealias Stride = DifferentiationUnittest.Tracked<T.Stride>
+  public func distance(to other: DifferentiationUnittest.Tracked<T>) -> DifferentiationUnittest.Tracked<T>.Stride
+  public func advanced(by n: DifferentiationUnittest.Tracked<T>.Stride) -> DifferentiationUnittest.Tracked<T>
+}
+extension Tracked : _Differentiation.Differentiable where T : _Differentiation.Differentiable, T == T.TangentVector {
+  public typealias TangentVector = DifferentiationUnittest.Tracked<T.TangentVector>
+  public var zeroTangentVectorInitializer: () -> DifferentiationUnittest.Tracked<T>.TangentVector {
+    @noDerivative get
+  }
+}
+extension Tracked where T : _Differentiation.Differentiable, T == T.TangentVector {
+  @usableFromInline
+  @derivative(of: init, wrt: value)
+  internal static func _vjpInit(_ value: T) -> (value: DifferentiationUnittest.Tracked<T>, pullback: (DifferentiationUnittest.Tracked<T>.TangentVector) -> (T.TangentVector))
+  @usableFromInline
+  @derivative(of: init, wrt: value)
+  internal static func _jvpInit(_ value: T) -> (value: DifferentiationUnittest.Tracked<T>, differential: (T.TangentVector) -> (DifferentiationUnittest.Tracked<T>.TangentVector))
+  @usableFromInline
+  @derivative(of: value, wrt: self)
+  internal func _vjpValue() -> (value: T, pullback: (T.TangentVector) -> DifferentiationUnittest.Tracked<T>.TangentVector)
+  @usableFromInline
+  @derivative(of: value, wrt: self)
+  internal func _jvpValue() -> (value: T, differential: (DifferentiationUnittest.Tracked<T>.TangentVector) -> T.TangentVector)
+}
+extension Tracked where T : _Differentiation.Differentiable, T == T.TangentVector {
+  @usableFromInline
+  @derivative(of: +, wrt: (lhs, rhs))
+  internal static func _vjpAdd(lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> (value: DifferentiationUnittest.Tracked<T>, pullback: (DifferentiationUnittest.Tracked<T>) -> (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<T>))
+  @usableFromInline
+  @derivative(of: +, wrt: (lhs, rhs))
+  internal static func _jvpAdd(lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> (value: DifferentiationUnittest.Tracked<T>, differential: (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<T>) -> DifferentiationUnittest.Tracked<T>)
+  @usableFromInline
+  @derivative(of: -, wrt: (lhs, rhs))
+  internal static func _vjpSubtract(lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> (value: DifferentiationUnittest.Tracked<T>, pullback: (DifferentiationUnittest.Tracked<T>) -> (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<T>))
+  @usableFromInline
+  @derivative(of: -, wrt: (lhs, rhs))
+  internal static func _jvpSubtract(lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> (value: DifferentiationUnittest.Tracked<T>, differential: (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<T>) -> DifferentiationUnittest.Tracked<T>)
+}
+extension Tracked where T : Swift.SignedNumeric, T : _Differentiation.Differentiable, T == T.Magnitude, T.Magnitude == T.TangentVector {
+  @usableFromInline
+  @derivative(of: *, wrt: (lhs, rhs))
+  internal static func _vjpMultiply(lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> (value: DifferentiationUnittest.Tracked<T>, pullback: (DifferentiationUnittest.Tracked<T>) -> (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<T>))
+  @usableFromInline
+  @derivative(of: *, wrt: (lhs, rhs))
+  internal static func _jvpMultiply(lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> (value: DifferentiationUnittest.Tracked<T>, differential: (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<T>) -> (DifferentiationUnittest.Tracked<T>))
+}
+extension Tracked where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector {
+  @usableFromInline
+  @derivative(of: /, wrt: (lhs, rhs))
+  internal static func _vjpDivide(lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> (value: DifferentiationUnittest.Tracked<T>, pullback: (DifferentiationUnittest.Tracked<T>) -> (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<T>))
+  @usableFromInline
+  @derivative(of: /, wrt: (lhs, rhs))
+  internal static func _jvpDivide(lhs: DifferentiationUnittest.Tracked<T>, rhs: DifferentiationUnittest.Tracked<T>) -> (value: DifferentiationUnittest.Tracked<T>, differential: (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<T>) -> (DifferentiationUnittest.Tracked<T>))
+}
+public func gradient<T, R>(at x: T, in f: @differentiable (T) -> DifferentiationUnittest.Tracked<R>) -> T.TangentVector where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector
+public func gradient<T, U, R>(at x: T, _ y: U, in f: @differentiable (T, U) -> DifferentiationUnittest.Tracked<R>) -> (T.TangentVector, U.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector
+public func derivative<T, R>(at x: DifferentiationUnittest.Tracked<T>, in f: @differentiable (DifferentiationUnittest.Tracked<T>) -> R) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable
+public func derivative<T, U, R>(at x: DifferentiationUnittest.Tracked<T>, _ y: DifferentiationUnittest.Tracked<U>, in f: @differentiable (DifferentiationUnittest.Tracked<T>, DifferentiationUnittest.Tracked<U>) -> R) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, R : _Differentiation.Differentiable
+public func valueWithGradient<T, R>(at x: T, in f: @differentiable (T) -> DifferentiationUnittest.Tracked<R>) -> (value: DifferentiationUnittest.Tracked<R>, gradient: T.TangentVector) where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector
+public func valueWithDerivative<T, R>(at x: DifferentiationUnittest.Tracked<T>, in f: @differentiable (DifferentiationUnittest.Tracked<T>) -> R) -> (value: R, derivative: R.TangentVector) where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable
+extension NonresilientTracked : Swift.ExpressibleByFloatLiteral where T : Swift.ExpressibleByFloatLiteral {
+  public init(floatLiteral value: T.FloatLiteralType)
+  public typealias FloatLiteralType = T.FloatLiteralType
+}
+extension NonresilientTracked : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension NonresilientTracked : Swift.ExpressibleByIntegerLiteral where T : Swift.ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: T.IntegerLiteralType)
+  public typealias IntegerLiteralType = T.IntegerLiteralType
+}
+extension NonresilientTracked : Swift.Comparable where T : Swift.Comparable {
+  public static func < (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> Swift.Bool
+  public static func <= (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> Swift.Bool
+  public static func > (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> Swift.Bool
+  public static func >= (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> Swift.Bool
+}
+extension NonresilientTracked : Swift.AdditiveArithmetic where T : Swift.AdditiveArithmetic {
+  public static var zero: DifferentiationUnittest.NonresilientTracked<T> {
+    get
+  }
+  public static func + (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> DifferentiationUnittest.NonresilientTracked<T>
+  public static func - (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> DifferentiationUnittest.NonresilientTracked<T>
+}
+extension NonresilientTracked : Swift.Equatable where T : Swift.Equatable {
+  public static func == (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> Swift.Bool
+}
+extension NonresilientTracked : Swift.SignedNumeric where T : Swift.SignedNumeric, T == T.Magnitude {
+  public typealias Magnitude = DifferentiationUnittest.NonresilientTracked<T.Magnitude>
+  public init?<U>(exactly source: U) where U : Swift.BinaryInteger
+  public var magnitude: DifferentiationUnittest.NonresilientTracked<T>.Magnitude {
+    get
+  }
+  public static func * (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> DifferentiationUnittest.NonresilientTracked<T>
+  public static func *= (lhs: inout DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>)
+}
+extension NonresilientTracked where T : Swift.FloatingPoint {
+  public static func / (lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> DifferentiationUnittest.NonresilientTracked<T>
+  public static func /= (lhs: inout DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>)
+}
+extension NonresilientTracked : Swift.Strideable where T : Swift.Strideable, T.Stride == T.Stride.Magnitude {
+  public typealias Stride = DifferentiationUnittest.NonresilientTracked<T.Stride>
+  public func distance(to other: DifferentiationUnittest.NonresilientTracked<T>) -> DifferentiationUnittest.NonresilientTracked<T>.Stride
+  public func advanced(by n: DifferentiationUnittest.NonresilientTracked<T>.Stride) -> DifferentiationUnittest.NonresilientTracked<T>
+}
+extension NonresilientTracked : _Differentiation.Differentiable where T : _Differentiation.Differentiable, T == T.TangentVector {
+  public typealias TangentVector = DifferentiationUnittest.NonresilientTracked<T.TangentVector>
+  public var zeroTangentVectorInitializer: () -> DifferentiationUnittest.NonresilientTracked<T>.TangentVector {
+    @noDerivative get
+  }
+}
+extension NonresilientTracked where T : _Differentiation.Differentiable, T == T.TangentVector {
+  @usableFromInline
+  @derivative(of: init, wrt: value)
+  internal static func _vjpInit(_ value: T) -> (value: DifferentiationUnittest.NonresilientTracked<T>, pullback: (DifferentiationUnittest.NonresilientTracked<T>.TangentVector) -> (T.TangentVector))
+  @usableFromInline
+  @derivative(of: init, wrt: value)
+  internal static func _jvpInit(_ value: T) -> (value: DifferentiationUnittest.NonresilientTracked<T>, differential: (T.TangentVector) -> (DifferentiationUnittest.NonresilientTracked<T>.TangentVector))
+  @usableFromInline
+  @derivative(of: value, wrt: self)
+  internal func _vjpValue() -> (value: T, pullback: (T.TangentVector) -> DifferentiationUnittest.NonresilientTracked<T>.TangentVector)
+  @usableFromInline
+  @derivative(of: value, wrt: self)
+  internal func _jvpValue() -> (value: T, differential: (DifferentiationUnittest.NonresilientTracked<T>.TangentVector) -> T.TangentVector)
+}
+extension NonresilientTracked where T : _Differentiation.Differentiable, T == T.TangentVector {
+  @usableFromInline
+  @derivative(of: +, wrt: (lhs, rhs))
+  internal static func _vjpAdd(lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> (value: DifferentiationUnittest.NonresilientTracked<T>, pullback: (DifferentiationUnittest.NonresilientTracked<T>) -> (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<T>))
+  @usableFromInline
+  @derivative(of: +, wrt: (lhs, rhs))
+  internal static func _jvpAdd(lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> (value: DifferentiationUnittest.NonresilientTracked<T>, differential: (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<T>) -> DifferentiationUnittest.NonresilientTracked<T>)
+  @usableFromInline
+  @derivative(of: -, wrt: (lhs, rhs))
+  internal static func _vjpSubtract(lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> (value: DifferentiationUnittest.NonresilientTracked<T>, pullback: (DifferentiationUnittest.NonresilientTracked<T>) -> (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<T>))
+  @usableFromInline
+  @derivative(of: -, wrt: (lhs, rhs))
+  internal static func _jvpSubtract(lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> (value: DifferentiationUnittest.NonresilientTracked<T>, differential: (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<T>) -> DifferentiationUnittest.NonresilientTracked<T>)
+}
+extension NonresilientTracked where T : Swift.SignedNumeric, T : _Differentiation.Differentiable, T == T.Magnitude, T.Magnitude == T.TangentVector {
+  @usableFromInline
+  @derivative(of: *, wrt: (lhs, rhs))
+  internal static func _vjpMultiply(lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> (value: DifferentiationUnittest.NonresilientTracked<T>, pullback: (DifferentiationUnittest.NonresilientTracked<T>) -> (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<T>))
+  @usableFromInline
+  @derivative(of: *, wrt: (lhs, rhs))
+  internal static func _jvpMultiply(lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> (value: DifferentiationUnittest.NonresilientTracked<T>, differential: (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<T>) -> (DifferentiationUnittest.NonresilientTracked<T>))
+}
+extension NonresilientTracked where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector {
+  @usableFromInline
+  @derivative(of: /, wrt: (lhs, rhs))
+  internal static func _vjpDivide(lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> (value: DifferentiationUnittest.NonresilientTracked<T>, pullback: (DifferentiationUnittest.NonresilientTracked<T>) -> (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<T>))
+  @usableFromInline
+  @derivative(of: /, wrt: (lhs, rhs))
+  internal static func _jvpDivide(lhs: DifferentiationUnittest.NonresilientTracked<T>, rhs: DifferentiationUnittest.NonresilientTracked<T>) -> (value: DifferentiationUnittest.NonresilientTracked<T>, differential: (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<T>) -> (DifferentiationUnittest.NonresilientTracked<T>))
+}
+public func gradient<T, R>(at x: T, in f: @differentiable (T) -> DifferentiationUnittest.NonresilientTracked<R>) -> T.TangentVector where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector
+public func gradient<T, U, R>(at x: T, _ y: U, in f: @differentiable (T, U) -> DifferentiationUnittest.NonresilientTracked<R>) -> (T.TangentVector, U.TangentVector) where T : _Differentiation.Differentiable, U : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector
+public func derivative<T, R>(at x: DifferentiationUnittest.NonresilientTracked<T>, in f: @differentiable (DifferentiationUnittest.NonresilientTracked<T>) -> R) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable
+public func derivative<T, U, R>(at x: DifferentiationUnittest.NonresilientTracked<T>, _ y: DifferentiationUnittest.NonresilientTracked<U>, in f: @differentiable (DifferentiationUnittest.NonresilientTracked<T>, DifferentiationUnittest.NonresilientTracked<U>) -> R) -> R.TangentVector where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, U : Swift.FloatingPoint, U : _Differentiation.Differentiable, U == U.TangentVector, R : _Differentiation.Differentiable
+public func valueWithGradient<T, R>(at x: T, in f: @differentiable (T) -> DifferentiationUnittest.NonresilientTracked<R>) -> (value: DifferentiationUnittest.NonresilientTracked<R>, gradient: T.TangentVector) where T : _Differentiation.Differentiable, R : Swift.FloatingPoint, R : _Differentiation.Differentiable, R == R.TangentVector
+public func valueWithDerivative<T, R>(at x: DifferentiationUnittest.NonresilientTracked<T>, in f: @differentiable (DifferentiationUnittest.NonresilientTracked<T>) -> R) -> (value: R, derivative: R.TangentVector) where T : Swift.FloatingPoint, T : _Differentiation.Differentiable, T == T.TangentVector, R : _Differentiation.Differentiable

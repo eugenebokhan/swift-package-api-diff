@@ -1,0 +1,23 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Swift version 5.3-dev (LLVM c377dba73da1364, Swift 4419f879adac304)
+// swift-module-flags: -target x86_64-apple-macosx10.9 -enable-objc-interop -enable-library-evolution -module-link-name swiftStdlibUnittestFoundationExtras -swift-version 5 -O -enforce-exclusivity=unchecked -module-name StdlibUnittestFoundationExtras
+import Foundation
+import ObjectiveC
+import StdlibUnittest
+import Swift
+extension NSLocale {
+  @objc dynamic public class func __swiftUnittest_currentLocale() -> Foundation.NSLocale
+}
+public func withOverriddenLocaleCurrentLocale<Result>(_ temporaryLocale: Foundation.NSLocale, _ body: () -> Result) -> Result
+public func withOverriddenLocaleCurrentLocale<Result>(_ temporaryLocaleIdentifier: Swift.String, _ body: () -> Result) -> Result
+@inline(never) public func autoreleasepoolIfUnoptimizedReturnAutoreleased(invoking body: () -> Swift.Void)
+@usableFromInline
+@_silgen_name("NSArray_getObjects")
+internal func NSArray_getObjects(nsArray: Swift.AnyObject, objects: Swift.AutoreleasingUnsafeMutablePointer<Swift.AnyObject?>?, rangeLocation: Swift.Int, rangeLength: Swift.Int)
+extension NSArray {
+  @nonobjc public func available_getObjects(_ objects: Swift.AutoreleasingUnsafeMutablePointer<Swift.AnyObject?>?, range: Foundation.NSRange)
+}
+extension NSDictionary {
+  @nonobjc public func available_getObjects(_ objects: Swift.AutoreleasingUnsafeMutablePointer<Swift.AnyObject?>?, andKeys keys: Swift.AutoreleasingUnsafeMutablePointer<Swift.AnyObject?>?, count: Swift.Int)
+}
+public func expectBridgeToNSValue<T>(_ value: T, nsValueInitializer: ((T) -> Foundation.NSValue)? = nil, nsValueGetter: ((Foundation.NSValue) -> T)? = nil, equal: (T, T) -> Swift.Bool)

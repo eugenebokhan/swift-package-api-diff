@@ -1,0 +1,22 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Swift version 5.3-dev (LLVM c377dba73da1364, Swift 4419f879adac304)
+// swift-module-flags: -disable-objc-attr-requires-foundation-module -target x86_64-apple-macosx10.9 -enable-objc-interop -enable-library-evolution -module-link-name swift_Concurrency -parse-stdlib -swift-version 5 -O -enforce-exclusivity=unchecked -module-name _Concurrency
+import Swift
+public protocol Actor : AnyObject {
+  func enqueue(partialTask: _Concurrency.PartialAsyncTask)
+}
+public struct _NativeActorQueue {
+}
+public typealias _DefaultActorQueue = _Concurrency._NativeActorQueue
+public func _defaultActorQueueCreate(_ actorClass: Swift.AnyObject.Type) -> _Concurrency._DefaultActorQueue
+public func _defaultActorQueueEnqueuePartialTask(actor: Swift.AnyObject, queue: inout _Concurrency._DefaultActorQueue, partialTask: _Concurrency.PartialAsyncTask)
+public struct PartialAsyncTask {
+  public func run()
+}
+public struct UnsafeContinuation<T> {
+  public func resume(_: T)
+}
+public struct UnsafeThrowingContinuation<T> {
+  public func resume(_: T)
+  public func fail(_: Swift.Error)
+}
