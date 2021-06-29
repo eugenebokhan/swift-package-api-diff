@@ -86,6 +86,10 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         @Option(name: .shortAndLong,
                 help: "Package Module Name.")
         var moduleName: String
+
+        @Option(name: .shortAndLong,
+                help: "Xcode Application Path.")
+        var xcodePath = "/Applications/Xcode-beta.app"
         
         @Flag(name: .shortAndLong,
               help: "Print diagnostic messages.")
@@ -100,11 +104,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
     }
     
     static func comparePackages(options: Options) throws -> Report {
-        let binPath = #file.deletingLastPathComponent
-                           .deletingLastPathComponent
-                           .appendingPathComponent("Utils")
-                           .appendingPathComponent("swift-macosx-x86_64")
-                           .appendingPathComponent("bin")
+        let binPath = options.xcodePath.appendingPathComponent("Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/")
         let compilerPath = binPath.appendingPathComponent("swiftc")
         let apiDigesterPath = binPath.appendingPathComponent("swift-api-digester")
         
@@ -153,7 +153,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
             """
             \(apiDigesterPath) \
             --dump-sdk \
-            -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
+            -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
             -module \(options.moduleName) \
             -I \(oldBuildFolder.path.appendingPathComponent("debug")) \
             -o \(oldModuleDumpPath) \
@@ -169,7 +169,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
             """
             \(apiDigesterPath) \
             --dump-sdk \
-            -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
+            -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
             -module \(options.moduleName) \
             -I \(newBuildFolder.path.appendingPathComponent("debug")) \
             -o \(newModuleDumpPath) \
@@ -185,7 +185,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
             """
             \(apiDigesterPath) \
             -diagnose-sdk \
-            -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
+            -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
             --input-paths \(oldModuleDumpPath) \
             -input-paths \(newModuleDumpPath) \
             2>&1 > \(reportFile.path) 2>&1
@@ -196,7 +196,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
             """
             \(apiDigesterPath) \
             -diagnose-sdk \
-            -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
+            -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
             --input-paths \(newModuleDumpPath) \
             -input-paths \(oldModuleDumpPath) \
             2>&1 > \(reversedReportFile.path) 2>&1

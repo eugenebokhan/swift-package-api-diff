@@ -21,7 +21,6 @@ let package = Package(
                              package: "swift-argument-parser"),
                     .product(name: "Files",
                              package: "Files")
-                ],
-                resources: [.copy("Utils/swift-macosx-x86_64/")])
+                ])
     ]
 )
