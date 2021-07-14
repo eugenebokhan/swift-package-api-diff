@@ -38,7 +38,8 @@ struct SwiftPackageAPIDiff: ParsableCommand {
 
         init(reportFile: File, reversedReportFile: File) throws {
             try self.init(reportFile: reportFile)
-            self.addedDeclarations = (try? Report(reportFile: reversedReportFile).removedDeclarations) ?? []
+            let reversedReport = try Report(reportFile: reversedReportFile)
+            self.addedDeclarations += reversedReport.removedDeclarations.map { $0.replacingOccurrences(of: "removed", with: "added") }
         }
         
         private init(reportFile: File) throws {
