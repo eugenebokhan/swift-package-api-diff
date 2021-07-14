@@ -1,11 +1,14 @@
 import Foundation
 import ArgumentParser
 import Files
+import TSCBasic
 
 struct SwiftPackageAPIDiff: ParsableCommand {
     
     enum Error: Swift.Error {
         case optionsValidationFailed
+        case nonZeroExit(code: Int32)
+        case signalExit(signal: Int32)
     }
     
     struct Report {
@@ -73,7 +76,6 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         ]
     }
 
-
     struct Options: ParsableArguments {
         @Option(name: .shortAndLong,
                 help: "Old Package Path.")
@@ -102,8 +104,10 @@ struct SwiftPackageAPIDiff: ParsableCommand {
               (try? Folder(path: options.newPackagePath).containsFile(named: "Package.swift")) ?? false
         else { throw Error.optionsValidationFailed }
     }
-    
+
+    // TODO: check target sdk
     static func comparePackages(options: Options) throws -> Report {
+        let sdkPath = options.xcodePath.appendingPathComponent("Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/")
         let binPath = options.xcodePath.appendingPathComponent("Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/")
         let compilerPath = binPath.appendingPathComponent("swiftc")
         let apiDigesterPath = binPath.appendingPathComponent("swift-api-digester")
@@ -118,90 +122,105 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         
         let reportFile = try temporaryFolder.createFile(named: "old_vs_new_report.txt")
         let reversedReportFile = try temporaryFolder.createFile(named: "new_vs_old_report.txt")
+
+        let stdoutClosure: TSCBasic.Process.OutputClosure = { bytes in
+            if options.verbose,
+               let stdout = String(bytes: bytes, encoding: .utf8) {
+                print(stdout)
+            }
+        }
         
         if options.verbose {
             print("Compiling old package ...")
         }
-        
-        Self.shell(
-            """
-            SWIFT_EXEC=\(compilerPath) \
-            swift build \
-            --package-path \(options.oldPackagePath) \
-            --build-path \(oldBuildFolder.path)
-            """
+
+        try Self.process(
+            arguments: [
+                "swift", "build",
+                "--package-path", options.oldPackagePath,
+                "--build-path", oldBuildFolder.path,
+            ],
+            environment: ["SWIFT_EXEC": compilerPath],
+            stdout: stdoutClosure
         )
         
         if options.verbose {
             print("Compiling new package ...")
         }
-        
-        Self.shell(
-            """
-            SWIFT_EXEC=\(compilerPath) \
-            swift build \
-            --package-path \(options.newPackagePath) \
-            --build-path \(newBuildFolder.path)
-            """
+
+        try Self.process(
+            arguments: [
+                "swift", "build",
+                "--package-path", options.newPackagePath,
+                "--build-path", newBuildFolder.path,
+            ],
+            environment: ["SWIFT_EXEC": compilerPath],
+            stdout: stdoutClosure
         )
         
         if options.verbose {
             print("Dumping old package module ...")
         }
-        
-        Self.shell(
-            """
-            \(apiDigesterPath) \
-            --dump-sdk \
-            -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
-            -module \(options.moduleName) \
-            -I \(oldBuildFolder.path.appendingPathComponent("debug")) \
-            -o \(oldModuleDumpPath) \
-            2> /dev/null
-            """
+
+        try Self.process(
+            arguments: [
+                apiDigesterPath,
+                "--dump-sdk",
+                "-sdk", sdkPath,
+                "-module", options.moduleName,
+                "-I", oldBuildFolder.path.appendingPathComponent("debug"),
+                "-o", oldModuleDumpPath
+            ],
+            stdout: stdoutClosure
         )
         
         if options.verbose {
             print("Dumping new package module ...")
         }
-        
-        Self.shell(
-            """
-            \(apiDigesterPath) \
-            --dump-sdk \
-            -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
-            -module \(options.moduleName) \
-            -I \(newBuildFolder.path.appendingPathComponent("debug")) \
-            -o \(newModuleDumpPath) \
-            2> /dev/null
-            """
+
+        try Self.process(
+            arguments: [
+                apiDigesterPath,
+                "--dump-sdk",
+                "-sdk", sdkPath,
+                "-module", options.moduleName,
+                "-I", newBuildFolder.path.appendingPathComponent("debug"),
+                "-o", newModuleDumpPath
+            ],
+            stdout: stdoutClosure
         )
         
         if options.verbose {
             print("Comparing module dumps ...")
         }
-        
-        Self.shell(
-            """
-            \(apiDigesterPath) \
-            -diagnose-sdk \
-            -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
-            --input-paths \(oldModuleDumpPath) \
-            -input-paths \(newModuleDumpPath) \
-            2>&1 > \(reportFile.path) 2>&1
-            """
+
+        var reportBuffer = [UInt8]()
+        try Self.process(
+            arguments: [
+                apiDigesterPath,
+                "-diagnose-sdk",
+                "-sdk", sdkPath,
+                "--input-paths", oldModuleDumpPath,
+                "-input-paths", newModuleDumpPath
+            ],
+            stdout: stdoutClosure,
+            stderr: { reportBuffer.append(contentsOf: $0) }
         )
-        
-        Self.shell(
-            """
-            \(apiDigesterPath) \
-            -diagnose-sdk \
-            -sdk /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk \
-            --input-paths \(newModuleDumpPath) \
-            -input-paths \(oldModuleDumpPath) \
-            2>&1 > \(reversedReportFile.path) 2>&1
-            """
+        try Data(reportBuffer).write(to: reportFile.url)
+
+        var reversedReportBuffer = [UInt8]()
+        try Self.process(
+            arguments: [
+                apiDigesterPath,
+                "-diagnose-sdk",
+                "-sdk", sdkPath,
+                "--input-paths", newModuleDumpPath,
+                "-input-paths", oldModuleDumpPath
+            ],
+            stdout: stdoutClosure,
+            stderr: { reversedReportBuffer.append(contentsOf: $0) }
         )
+        try Data(reportBuffer).write(to: reversedReportFile.url)
         
         return try .init(reportFile: reportFile,
                          reversedReportFile: reversedReportFile)
@@ -212,21 +231,26 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         subcommands: [APIChangesType.self, APIChangesDescription.self],
         defaultSubcommand: APIChangesType.self
     )
-    
-    @discardableResult
-    private static func shell(_ command: String) -> String {
-        let task = Process()
-        let pipe = Pipe()
 
-        task.standardOutput = pipe
-        task.arguments = ["-c", command]
-        task.launchPath = "/bin/bash"
-        task.launch()
+    private static func process(arguments: [String],
+                                environment: [String: String] = [:],
+                                stdout: @escaping TSCBasic.Process.OutputClosure = { _ in },
+                                stderr: @escaping TSCBasic.Process.OutputClosure = { _ in }) throws {
+        let process = Process(arguments: arguments,
+                              environment: ProcessEnv.vars.merging(environment) { (_, new) in new },
+                              outputRedirection: .stream(stdout: stdout, stderr: stderr))
 
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8)!
+        try process.launch()
+        let result = try process.waitUntilExit()
 
-        return output
+        switch result.exitStatus {
+        case let .terminated(code: code):
+            if code != .zero {
+                throw Error.nonZeroExit(code: code)
+            }
+        case let .signalled(signal: signal):
+            throw Error.signalExit(signal: signal)
+        }
     }
     
 }
