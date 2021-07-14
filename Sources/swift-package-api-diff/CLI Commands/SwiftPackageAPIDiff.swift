@@ -107,7 +107,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
 
     // TODO: check target sdk
     static func comparePackages(options: Options) throws -> Report {
-        let sdkPath = options.xcodePath.appendingPathComponent("Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/")
+        let sdkPath = options.xcodePath.appendingPathComponent("Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/")
         let binPath = options.xcodePath.appendingPathComponent("Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/")
         let compilerPath = binPath.appendingPathComponent("swiftc")
         let apiDigesterPath = binPath.appendingPathComponent("swift-api-digester")
@@ -152,7 +152,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
             arguments: [
                 "swift", "build",
                 "--package-path", options.newPackagePath,
-                "--build-path", newBuildFolder.path,
+                "--build-path", newBuildFolder.path
             ],
             environment: ["SWIFT_EXEC": compilerPath],
             stdout: stdoutClosure
