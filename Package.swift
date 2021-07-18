@@ -28,14 +28,13 @@ let package = Package(
                     .product(name: "SwiftPM-auto",
                              package: "SwiftPM"),
                 ]),
-        .testTarget(
-            name: "SwiftPackageAPIDiffTests",
-            dependencies: [
-                "swift-package-api-diff",
-                .product(name: "Files",
-                         package: "Files"),
-                .product(name: "SwiftPM-auto",
-                         package: "SwiftPM"),
-            ]),
+        .testTarget(name: "swift-package-api-diff-tests",
+                    dependencies: [
+                        "swift-package-api-diff",
+                        .product(name: "Files",
+                                 package: "Files"),
+                        .product(name: "SwiftPM-auto",
+                                 package: "SwiftPM"),
+                    ]),
     ]
 )
