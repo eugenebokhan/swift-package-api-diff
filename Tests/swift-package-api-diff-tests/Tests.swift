@@ -29,49 +29,6 @@ final class SwiftPackageAPIDiffTests: XCTestCase {
         try self.temporaryFolder?.delete()
     }
 
-    func testMinor() throws {
-        guard let temporaryFolder = self.temporaryFolder
-        else { throw Error.folderCreationFailed }
-
-        let packageName = "Package"
-        let oldPackageName = "Old"
-        let newPackageName = "New"
-
-        let oldPackageFolder = try temporaryFolder.createSubfolder(named: oldPackageName)
-        let newPackageFolder = try temporaryFolder.createSubfolder(named: newPackageName)
-        let resultFile = try temporaryFolder.createFile(at: "result.txt")
-
-        Self.shell("""
-        cd \(oldPackageFolder.path);
-        swift package init --name \(packageName);
-        cd \(newPackageFolder.path);
-        swift package init --name \(packageName)
-        """)
-
-        let newDeclaration = """
-
-        public struct NewStruct {
-            let newValue = Float.zero
-        }
-        """
-
-        let modifiedFile = try File(path: newPackageFolder.url.appendingPathComponent("Sources/Package/Package.swift").path)
-        var modifiedString = try String(contentsOf: modifiedFile.url)
-        modifiedString += newDeclaration
-
-        guard let modifiedStringData = modifiedString.data(using: .utf8)
-        else { throw Error.dataCreationfailed }
-        try modifiedStringData.write(to: modifiedFile.url)
-
-        Self.shell("""
-        \(temporaryFolder.path)/swift-package-api-diff -o \(oldPackageFolder.path) -n \(newPackageFolder.path) -m \(packageName) >> \(resultFile.path)
-        """)
-
-        let result = try String(contentsOfFile: resultFile.path)
-
-        XCTAssertEqual(result, "minor\n")
-    }
-
     func testBreaking() throws {
         guard let temporaryFolder = self.temporaryFolder
         else { throw Error.folderCreationFailed }
