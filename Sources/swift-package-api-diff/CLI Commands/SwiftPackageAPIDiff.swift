@@ -15,11 +15,13 @@ struct SwiftPackageAPIDiff: ParsableCommand {
 
         enum ChangesType: String {
             case breaking
-            case minor
+            case nonBreaking = "non-breaking"
         }
 
         var changesType: ChangesType {
-            Self.keyPaths.allSatisfy { self[keyPath: $0].isEmpty } ? .minor : .breaking
+            Self.keyPaths
+                .filter { $0 != \.addedDeclarations }
+                .allSatisfy { self[keyPath: $0].isEmpty } ? .nonBreaking : .breaking
         }
 
         var description: String {
