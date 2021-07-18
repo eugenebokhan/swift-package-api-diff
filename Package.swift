@@ -6,8 +6,8 @@ let package = Package(
     name: "swift-package-api-diff",
     platforms: [.macOS(.v10_15)],
     products: [
-        Product.executable(name: "swift-package-api-diff",
-                           targets: ["swift-package-api-diff"])
+        .executable(name: "swift-package-api-diff",
+                    targets: ["swift-package-api-diff"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git",
@@ -27,6 +27,15 @@ let package = Package(
                              package: "Files"),
                     .product(name: "SwiftPM-auto",
                              package: "SwiftPM"),
-                ])
+                ]),
+        .testTarget(
+            name: "SwiftPackageAPIDiffTests",
+            dependencies: [
+                "swift-package-api-diff",
+                .product(name: "Files",
+                         package: "Files"),
+                .product(name: "SwiftPM-auto",
+                         package: "SwiftPM"),
+            ]),
     ]
 )

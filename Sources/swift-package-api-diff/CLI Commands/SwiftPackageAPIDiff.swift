@@ -11,11 +11,24 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         case signalExit(signal: Int32)
     }
     
-    struct Report {
-        
+    struct Report: CustomStringConvertible {
+
         enum ChangesType: String {
             case breaking
             case minor
+        }
+
+        var changesType: ChangesType {
+            Self.keyPaths.allSatisfy { self[keyPath: $0].isEmpty } ? .minor : .breaking
+        }
+
+        var description: String {
+            Self.map
+                .mapValues { self[keyPath: $0] }
+                .filter { !$0.value.isEmpty }
+                .reduce("") {
+                $0 + $1.key + "\n" + $1.value.reduce("", { $0 + " - " + $1 + "\n" })
+            }
         }
         
         private(set) var genericSignatureChanges: [String] = []
@@ -31,15 +44,13 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         private(set) var protocolRequirementChanges: [String] = []
         private(set) var classInheritanceChanges: [String] = []
         private(set) var otherChanges: [String] = []
-        
-        var changesType: ChangesType {
-            Self.map.values.allSatisfy { self[keyPath: $0].isEmpty } ? .minor : .breaking
-        }
 
         init(reportFile: File, reversedReportFile: File) throws {
             try self.init(reportFile: reportFile)
             let reversedReport = try Report(reportFile: reversedReportFile)
-            self.addedDeclarations += reversedReport.removedDeclarations.map { $0.replacingOccurrences(of: "removed", with: "added") }
+            self.addedDeclarations += reversedReport.removedDeclarations.map {
+                $0.replacingOccurrences(of: "removed", with: "added")
+            }
         }
         
         private init(reportFile: File) throws {
@@ -60,11 +71,28 @@ struct SwiftPackageAPIDiff: ParsableCommand {
                 }
             }
         }
+
+        private static let keyPaths: [KeyPath<Report, [String]>] = [
+            \.genericSignatureChanges,
+            \.rawRepresentableChanges,
+            \.removedDeclarations,
+            \.addedDeclarations,
+            \.movedDeclarations,
+            \.renamedDeclarations,
+            \.typeChanges,
+            \.declAttributeChanges,
+            \.fixedLayoutTypeChanges,
+            \.protocolConformanceChanges,
+            \.protocolRequirementChanges,
+            \.classInheritanceChanges,
+            \.otherChanges
+        ]
         
         private static let map: [String: WritableKeyPath<Report, [String]>] = [
             "/* Generic Signature Changes */": \.genericSignatureChanges,
             "/* RawRepresentable Changes */": \.rawRepresentableChanges,
             "/* Removed Decls */": \.removedDeclarations,
+            "/* Added Decls */": \.addedDeclarations,
             "/* Moved Decls */": \.movedDeclarations,
             "/* Renamed Decls */": \.renamedDeclarations,
             "/* Type Changes */": \.typeChanges,
@@ -80,15 +108,15 @@ struct SwiftPackageAPIDiff: ParsableCommand {
     struct Options: ParsableArguments {
         @Option(name: .shortAndLong,
                 help: "Old Package Path.")
-        var oldPackagePath: String
+        var oldPackage: String
         
         @Option(name: .shortAndLong,
                 help: "New Package Path.")
-        var newPackagePath: String
+        var newPackage: String
         
         @Option(name: .shortAndLong,
                 help: "Package Module Name.")
-        var moduleName: String
+        var module: String
 
         @Option(name: .shortAndLong,
                 help: "Xcode Application Path.")
@@ -100,13 +128,13 @@ struct SwiftPackageAPIDiff: ParsableCommand {
     }
     
     static func validateOptions(_ options: Options) throws {
-        guard !options.moduleName.isEmpty,
-              (try? Folder(path: options.oldPackagePath).containsFile(named: "Package.swift")) ?? false,
-              (try? Folder(path: options.newPackagePath).containsFile(named: "Package.swift")) ?? false
+        guard !options.module.isEmpty,
+              (try? Folder(path: options.oldPackage).containsFile(named: "Package.swift")) ?? false,
+              (try? Folder(path: options.newPackage).containsFile(named: "Package.swift")) ?? false
         else { throw Error.optionsValidationFailed }
     }
 
-    // TODO: check target sdk
+    // TODO: add target sdk check
     static func comparePackages(options: Options) throws -> Report {
         let sdkPath = options.xcodePath.appendingPathComponent("Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/")
         let binPath = options.xcodePath.appendingPathComponent("Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/")
@@ -138,7 +166,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         try Self.process(
             arguments: [
                 "swift", "build",
-                "--package-path", options.oldPackagePath,
+                "--package-path", options.oldPackage,
                 "--build-path", oldBuildFolder.path,
             ],
             environment: ["SWIFT_EXEC": compilerPath],
@@ -152,7 +180,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         try Self.process(
             arguments: [
                 "swift", "build",
-                "--package-path", options.newPackagePath,
+                "--package-path", options.newPackage,
                 "--build-path", newBuildFolder.path
             ],
             environment: ["SWIFT_EXEC": compilerPath],
@@ -168,7 +196,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
                 apiDigesterPath,
                 "--dump-sdk",
                 "-sdk", sdkPath,
-                "-module", options.moduleName,
+                "-module", options.module,
                 "-I", oldBuildFolder.path.appendingPathComponent("debug"),
                 "-o", oldModuleDumpPath
             ],
@@ -184,7 +212,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
                 apiDigesterPath,
                 "--dump-sdk",
                 "-sdk", sdkPath,
-                "-module", options.moduleName,
+                "-module", options.module,
                 "-I", newBuildFolder.path.appendingPathComponent("debug"),
                 "-o", newModuleDumpPath
             ],
@@ -221,7 +249,7 @@ struct SwiftPackageAPIDiff: ParsableCommand {
             stdout: stdoutClosure,
             stderr: { reversedReportBuffer.append(contentsOf: $0) }
         )
-        try Data(reportBuffer).write(to: reversedReportFile.url)
+        try Data(reversedReportBuffer).write(to: reversedReportFile.url)
         
         return try .init(reportFile: reportFile,
                          reversedReportFile: reversedReportFile)
