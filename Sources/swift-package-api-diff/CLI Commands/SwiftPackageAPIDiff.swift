@@ -25,12 +25,14 @@ struct SwiftPackageAPIDiff: ParsableCommand {
         }
 
         var description: String {
-            Self.map
-                .mapValues { self[keyPath: $0] }
-                .filter { !$0.value.isEmpty }
-                .reduce("") {
-                $0 + $1.key + "\n" + $1.value.reduce("", { $0 + " - " + $1 + "\n" })
+            var description = Self.map
+                                  .mapValues { self[keyPath: $0] }
+                                  .filter { !$0.value.isEmpty }
+                                  .reduce("") { $0 + $1.key + "\n" + $1.value.reduce("", { $0 + " - " + $1 + "\n" }) }
+            if description.isEmpty {
+                description = "No changes detected"
             }
+            return description
         }
         
         private(set) var genericSignatureChanges: [String] = []
